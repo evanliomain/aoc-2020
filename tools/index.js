@@ -1,4 +1,3 @@
-module.exports.chunk = require('./chunk');
 module.exports.filterUntil = require('./filter-until');
 module.exports.lagCircular = require('./lag-circular');
 module.exports.lag = require('./lag');
@@ -23,6 +22,5 @@ module.exports.findMatrix = require('./find-matrix');
 module.exports.findAllMatrix = require('./find-all-matrix');
 module.exports.stringToAscii = require('./string-to-ascii');
 module.exports.asciiToString = require('./ascii-to-string');
-module.exports.parseInteger = require('./parse-integer');
 module.exports.replace = require('./replace');
 module.exports.equal = require('./equal');
