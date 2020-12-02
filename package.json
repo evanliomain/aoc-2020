@@ -2,6 +2,9 @@
   "name": "aoc-2020",
   "version": "1.0.0",
   "aocYear": "2020",
+  "daysWithNoPoint": [
+    1
+  ],
   "license": "MIT",
   "scripts": {
     "gen": "plop init",

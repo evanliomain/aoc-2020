@@ -33,7 +33,7 @@ const rimraf = require('rimraf');
 const leaderboard = require('../leaderboard.json');
 
 // Because they can be bugs, some days may worth no points.
-const daysWithNoPoint = [];
+const daysWithNoPoint = pkg.daysWithNoPoint;
 
 const width = 1000;
 const height = 1200;
