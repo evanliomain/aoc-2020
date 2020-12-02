@@ -75,6 +75,7 @@ async function main() {
   console.log(`Generating classement-* chart`);
   await generateClassments(year, chartData, day);
 
+  /*
   console.log(`Generating classement animation chart`);
   await execCommand(
     `convert -delay 100 -loop 1 dist/classement/*.png dist/classement-${year}-${day}.gif`
@@ -84,6 +85,7 @@ async function main() {
     'Animated chart generated at ' +
       chalk.blue(`dist/classement-${year}-${day}.gif`)
   );
+  */
 
   // Generate hothours chart
   const result = rawToResult(daysWithNoPoint)(data);
@@ -122,10 +124,13 @@ async function generateClassments(year, chartData, numeroDay) {
   // for (let i = 0; i < minutes.length; i++) {
   //   await gen(minutes[i]);
   // }
-  const n = 24;
-  for (let i = 0; i < n; i++) {
-    await gen(i);
-  }
+
+  // const n = 24;
+  // for (let i = 0; i < n; i++) {
+  //   await gen(i);
+  // }
+
+  await gen(23);
 }
 
 function generateClassment(year, chartData, numeroDay) {
@@ -136,7 +141,7 @@ function generateClassment(year, chartData, numeroDay) {
     await generateChartFile(
       classementSpec,
       {
-        chartName: `classement/classement-${date}`,
+        chartName: `classement/classement-${date.replace(/:/g, '_')}`,
         width: 1000,
         height: 1200,
         dwidth: 200

@@ -148,7 +148,7 @@
     {
       "orient": "left",
       "scale": "ylegend",
-      "labelFontSize": 25,
+      "labelFontSize": 18,
       "labelLimit": 300
     }
   ],

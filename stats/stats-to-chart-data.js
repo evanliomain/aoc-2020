@@ -26,20 +26,26 @@ function statsToChartData(year, numeroDay, daysWithNoPoint) {
         )
       )
       .chain(T.flat())
+      .chain(T.filter(d => !T.isNil(d.name)))
       .chain(
         T.map(d => {
-          if (!players[d.name]) {
-            console.log(`Configuration for ${d.name} is missing`);
+          if (!players[d.name] && !players[d.id]) {
+            console.log(`Configuration for ${d.name}(${d.id}) is missing`);
           }
           return d;
         })
       )
       .chain(
-        T.map(d => ({
-          ...d,
-          firstname: players[d.name].firstname,
-          lastname: players[d.name].lastname
-        }))
+        T.map(d => {
+          let player = !T.isNil(players[d.name])
+            ? players[d.name]
+            : players[d.id];
+          return {
+            ...d,
+            firstname: player.firstname,
+            lastname: player.lastname
+          };
+        })
       )
       .value();
 }
@@ -130,7 +136,7 @@ function computeDateScore(year, numeroDay, nbPlayers, members, result) {
       // .chain(addMinutes(i))
       .chain(addHours(i))
       .value();
-    console.log(date);
+    // console.log(i, date);
 
     const sDate = format("yyyy-MM-dd'T'HH:mm:ss")(date);
     const time = T.chain(date)
@@ -197,10 +203,21 @@ function addPlayerInfo() {
     T.chain(raw)
       .chain(
         T.map(d => {
-          if (!players[d.name]) {
-            console.log(`Configuration for ${d.name} is missing`);
+          if (!players[d.name] && !players[d.id]) {
+            console.log(`Configuration for ${d.name}(${d.id}) is missing`);
           }
           return d;
+        })
+      )
+      .chain(
+        T.map(d => {
+          let player = !T.isNil(players[d.name])
+            ? players[d.name]
+            : players[d.id];
+          return {
+            ...d,
+            ...player
+          };
         })
       )
       .chain(
