@@ -54,6 +54,10 @@ async function main() {
   );
   const data = await getData({ year, leaderboard });
 
+  await writeFile(`dist/data-raw-${year}-${day}-${leaderboard}.json`)(
+    JSON.stringify(data, 2)
+  );
+
   console.log('Transform data');
   const chartData = statsToChartData(year, day, daysWithNoPoint)(data);
   await writeFile(`dist/data-${year}-${day}-${leaderboard}.json`)(
