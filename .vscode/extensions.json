@@ -4,6 +4,27 @@
   "recommendations": [
     // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
     "esbenp.prettier-vscode",
-    "Orta.vscode-jest"
+
+    // XML tools
+    "DotJoshJohnson.xml",
+
+    // JSON tools
+    "eriklynd.json-tools",
+    "octref.vscode-json-transform",
+
+    // Jest
+    "orta.vscode-jest",
+    "andys8.jest-snippets",
+
+    "vtrois.gitmoji-vscode",
+
+    // SVG
+    "cssho.vscode-svgviewer",
+
+    "coenraads.bracket-pair-colorizer-2",
+
+    "yukai.map-replace-js",
+
+    "visualstudioexptteam.vscodeintellicode"
   ]
 }
