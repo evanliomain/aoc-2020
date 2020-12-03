@@ -1,4 +1,5 @@
 const T = require('taninsam');
+const chalk = require('chalk');
 const format = require('date-fns/fp/format');
 const parse = require('date-fns/fp/parse');
 const addDays = require('date-fns/fp/addDays');
@@ -8,7 +9,29 @@ const makeArray = require('../tools/make-array');
 const players = require('../playeurs.json');
 const log = require('../tools/log');
 
-module.exports = { statsToChartData, rawToResult };
+module.exports = { statsToChartData, rawToResult, isRawValid };
+
+function isRawValid(raw) {
+  const wrongMembers = T.chain(raw.members)
+    .chain(T.values())
+    .chain(
+      T.map(({ id, name }) => ({
+        id,
+        name,
+        isValid: !T.isNil(players[name]) || !T.isNil(players[id])
+      }))
+    )
+    .chain(T.filter(({ isValid }) => !isValid))
+    .value();
+
+  if (wrongMembers.length === 0) {
+    return true;
+  }
+  wrongMembers.forEach(({ name, id }) => {
+    console.log(`Add ${chalk.red(name)} - #${chalk.grey(id)} to playeurs.json`);
+  });
+  return false;
+}
 
 function statsToChartData(year, numeroDay, daysWithNoPoint) {
   return stats =>

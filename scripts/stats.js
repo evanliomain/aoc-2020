@@ -18,7 +18,8 @@ const generateChartFile = require('../stats/generate-chart-file');
 const getData = require('../stats/get-data');
 const {
   statsToChartData,
-  rawToResult
+  rawToResult,
+  isRawValid
 } = require('../stats/stats-to-chart-data');
 const writeFile = require('../stats/write-file');
 const then = require('../tools/then');
@@ -57,6 +58,11 @@ async function main() {
   await writeFile(`dist/data-raw-${year}-${day}-${leaderboard}.json`)(
     JSON.stringify(data, 2)
   );
+
+  if (!isRawValid(data)) {
+    console.log(chalk.red('Fail to load raw'));
+    return 1;
+  }
 
   console.log('Transform data');
   const chartData = statsToChartData(year, day, daysWithNoPoint)(data);
