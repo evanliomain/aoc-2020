@@ -11,8 +11,5 @@ module.exports = (n, sample) => {
     suffix += '/' + sample;
   }
 
-  return fs
-    .readFileSync(`./days/${n}/sample${suffix}`, 'utf8')
-    .split('\n')
-    .filter(x => '' !== x);
+  return fs.readFileSync(`./days/${n}/sample${suffix}`, 'utf8').split('\n');
 };

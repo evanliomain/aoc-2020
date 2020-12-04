@@ -25,7 +25,7 @@ function get(day, year) {
       return input;
     });
   }
-  return inputPromise.then(data => data.split('\n').filter(x => '' !== x));
+  return inputPromise.then(data => data.split('\n'));
 }
 
 module.exports.get = get;

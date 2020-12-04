@@ -14,7 +14,12 @@ async function solve(day, level, input) {
   }
   console.time('solving in');
   try {
-    result = await solve(parser(input));
+    result = await solve(
+      parser(
+        input.filter(x => '' !== x),
+        input
+      )
+    );
   } catch (e) {
     console.log(chalk.bold.red(e));
     throw e;
