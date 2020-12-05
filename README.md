@@ -21,11 +21,11 @@ Run code for the day 1 exercice 2 on sample 3
 Test all days
 `yarn test`
 
-Test only one day
-`yarn test -t=01`
+Test only day 5 (all tests under days/05)
+`yarn test 5`
 
 Test only day 3 exercice 2,
-`yarn test -t=03-2`
+`yarn test 3 2`
 
 Run test, if succeed run on puzzle input, if no error, ask to submit result, day 3 level 1 (Run'N Submit)
 `yarn rns 3 1`

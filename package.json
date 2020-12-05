@@ -13,7 +13,8 @@
     "submit": "node ./scripts/submit.js --",
     "rns": "node ./scripts/run-and-submit.js --",
     "checker": "node ./scripts/check.js --",
-    "test": "jest"
+    "test": "node ./scripts/run-test.js --",
+    "jest": "jest"
   },
   "dependencies": {
     "chalk": "^2.4.2",

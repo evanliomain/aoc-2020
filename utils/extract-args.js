@@ -81,9 +81,19 @@ function extractRun(argv) {
   return { day, level: parseInt(level, 10) };
 }
 
+function extractTest(argv) {
+  const [, , , d, level] = process.argv;
+
+  return {
+    day: undefined !== d ? d.padStart(2, '0') : d,
+    level: undefined !== level ? parseInt(level, 10) : level
+  };
+}
+
 module.exports = {
   extractStart,
   extractSubmit,
   extractRun,
-  extractStats
+  extractStats,
+  extractTest
 };
