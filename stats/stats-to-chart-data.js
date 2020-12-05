@@ -49,20 +49,10 @@ function statsToChartData(year, numeroDay, daysWithNoPoint) {
         )
       )
       .chain(T.flat())
-      .chain(T.filter(d => !T.isNil(d.name)))
+      .chain(T.filter(d => !T.isNil(d.name) && !T.isNil(players[d.name])))
       .chain(
         T.map(d => {
-          if (!players[d.name] && !players[d.id]) {
-            console.log(`Configuration for ${d.name}(${d.id}) is missing`);
-          }
-          return d;
-        })
-      )
-      .chain(
-        T.map(d => {
-          let player = !T.isNil(players[d.name])
-            ? players[d.name]
-            : players[d.id];
+          const player = players[d.name];
           return {
             ...d,
             firstname: player.firstname,
@@ -224,30 +214,7 @@ function groupPlayer(groups) {
 function addPlayerInfo() {
   return raw =>
     T.chain(raw)
-      .chain(
-        T.map(d => {
-          if (!players[d.name] && !players[d.id]) {
-            console.log(`Configuration for ${d.name}(${d.id}) is missing`);
-          }
-          return d;
-        })
-      )
-      .chain(
-        T.map(d => {
-          let player = !T.isNil(players[d.name])
-            ? players[d.name]
-            : players[d.id];
-          return {
-            ...d,
-            ...player
-          };
-        })
-      )
-      .chain(
-        T.map(d => ({
-          ...d,
-          ...players[d.name]
-        }))
-      )
+      .chain(T.filter(d => !T.isNil(d.name) && !T.isNil(players[d.name])))
+      .chain(T.map(d => ({ ...d, ...players[d.name] })))
       .value();
 }

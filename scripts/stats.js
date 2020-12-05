@@ -59,10 +59,7 @@ async function main() {
     JSON.stringify(data, 2)
   );
 
-  if (!isRawValid(data)) {
-    console.log(chalk.red('Fail to load raw'));
-    return 1;
-  }
+  isRawValid(data);
 
   console.log('Transform data');
   const chartData = statsToChartData(year, day, daysWithNoPoint)(data);
