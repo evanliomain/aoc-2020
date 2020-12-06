@@ -125,6 +125,13 @@ function getDate(year, numeroDay) {
       .value();
 }
 
+function getDateForSubtitle(year, numeroDay) {
+  return T.chain(`${year}-12-${numeroDay}T00:00:00.000-05`)
+    .chain(parse(new Date())("yyyy-MM-dd'T'HH:mm:ss.SSSx"))
+    .chain(format("'Jour 'dd"))
+    .value();
+}
+
 async function generateClassments(year, chartData, numeroDay) {
   const gen = generateClassment(year, chartData, numeroDay);
   // const minutes = makeArray(x => 15 * x)(24 * 4);
@@ -142,9 +149,10 @@ async function generateClassments(year, chartData, numeroDay) {
 
 function generateClassment(year, chartData, numeroDay) {
   const toDate = getDate(year, numeroDay);
+  const subtitle = getDateForSubtitle(year, numeroDay);
   return async i => {
     const date = toDate(i);
-    classementSpec.title = { text: `Classement AoC ${year}`, subtitle: date };
+    classementSpec.title = { text: `Classement AoC ${year}`, subtitle };
     await generateChartFile(
       classementSpec,
       {
