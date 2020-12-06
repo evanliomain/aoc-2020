@@ -20,12 +20,13 @@
         {
           "type": "collect",
           "sort": { "field": "score", "order": "descending" }
-        }
+        },
+        { "type": "identifier", "as": "position" }
       ]
     },
     {
       "name": "names",
-      "source": "source",
+      "source": "table",
       "transform": [
         {
           "type": "formula",
@@ -63,7 +64,20 @@
       "type": "point",
       "range": "height",
       "padding": 0.1,
-      "domain": { "data": "names", "field": "fullname" }
+      "domain": {
+        "data": "names",
+        "field": "fullname"
+      }
+    },
+    {
+      "name": "position",
+      "type": "point",
+      "range": "height",
+      "padding": 0.1,
+      "domain": {
+        "data": "table",
+        "field": "position"
+      }
     },
     {
       "name": "color",
@@ -148,6 +162,13 @@
     {
       "orient": "left",
       "scale": "ylegend",
+      "labelFontSize": 18,
+      "labelLimit": 300,
+      "labelPadding": 40
+    },
+    {
+      "orient": "left",
+      "scale": "position",
       "labelFontSize": 18,
       "labelLimit": 300
     }
