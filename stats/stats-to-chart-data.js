@@ -44,7 +44,8 @@ function statsToChartData(year, numeroDay, daysWithNoPoint) {
             numeroDay,
             getNbMembers(stats),
             getMembers(stats),
-            rawToResult(daysWithNoPoint)(stats)
+            rawToResult(daysWithNoPoint)(stats),
+            daysWithNoPoint
           )
         )
       )
@@ -67,7 +68,12 @@ function statsToChartData(year, numeroDay, daysWithNoPoint) {
 function getMembers(stats) {
   return T.chain(stats.members)
     .chain(T.values())
-    .chain(T.map(({ id, name, local_score }) => [id, { name, local_score }]))
+    .chain(
+      T.map(({ id, name, local_score, stars }) => [
+        id,
+        { name, local_score, local_stars: stars }
+      ])
+    )
     .chain(T.fromEntries())
     .value();
 }
@@ -117,18 +123,12 @@ function rawToResult(daysWithNoPoint) {
         })
       )
       .chain(T.flat())
-      .chain(T.filter(({ day }) => !daysWithNoPoint.includes(day)))
       .chain(T.sortBy(({ ts }) => ts))
       .chain(
         T.map(d => {
-          // console.log(
-          //   format("yyyy-MM-dd'T'HH:mm:ss")(parse(new Date())('t')(d.ts))
-          // );
-
           const date = T.chain(d.ts)
             .chain(parse(new Date())('t'))
             .value();
-          // .chain(format("yyyy-MM-dd'T'HH:mm:ss"))
           return {
             ...d,
             date: format("yyyy-MM-dd'T'HH:mm:ss")(date),
@@ -142,7 +142,14 @@ function rawToResult(daysWithNoPoint) {
       .chain(addPlayerInfo())
       .value();
 }
-function computeDateScore(year, numeroDay, nbPlayers, members, result) {
+function computeDateScore(
+  year,
+  numeroDay,
+  nbPlayers,
+  members,
+  result,
+  daysWithNoPoint
+) {
   return i => {
     const date = T.chain(`${year}-12-${numeroDay}T00:00:00.000-05`)
       .chain(parse(new Date())("yyyy-MM-dd'T'HH:mm:ss.SSSx"))
@@ -158,17 +165,23 @@ function computeDateScore(year, numeroDay, nbPlayers, members, result) {
       .chain(t => parseInt(t, 10))
       .value();
 
+    console.log('computeDateScore i');
     const res = T.chain(result)
       .chain(T.filter(({ ts }) => ts <= time))
       .chain(groupResult)
-      .chain(markPoints(nbPlayers))
+      .chain(markPoints(nbPlayers, daysWithNoPoint))
       .chain(groupPlayer)
       .chain(T.entries())
       .chain(
-        T.map(([id, score]) => ({ id, ...members[id], score, date: sDate }))
+        T.map(([id, { score, stars }]) => ({
+          id,
+          ...members[id],
+          score,
+          stars,
+          date: sDate
+        }))
       )
       .value();
-
     return res;
   };
 }
@@ -179,9 +192,9 @@ function groupResult(results) {
       T.reduce((acc, { id, day, level, ts }) => {
         const key = `${day}-${level}`;
         if (T.isNil(acc[key])) {
-          acc[key] = [{ id, ts }];
+          acc[key] = [{ id, ts, day }];
         } else {
-          acc[key].push({ id, ts });
+          acc[key].push({ id, ts, day });
         }
         return acc;
       }, {})
@@ -190,10 +203,36 @@ function groupResult(results) {
     .value();
 }
 
-function markPoints(nbPlayers) {
+function markPoints(nbPlayers, daysWithNoPoint) {
+  const dateParse = parse(new Date())('t');
+  const dateFormat = format('d');
+  const tsToDay = ts => dateFormat(dateParse(ts));
   return groups =>
     T.chain(groups)
-      .chain(T.map(T.map((res, i) => ({ ...res, score: nbPlayers - i }))))
+      .chain(
+        T.map(
+          T.map(res => ({
+            ...res,
+            day: tsToDay(res.ts)
+          }))
+        )
+      )
+      .chain(
+        T.map(
+          T.map(res => ({
+            ...res,
+            shouldScore: !daysWithNoPoint.includes(parseInt(res.day, 10))
+          }))
+        )
+      )
+      .chain(
+        T.map(
+          T.map((res, i) => ({
+            ...res,
+            score: res.shouldScore ? nbPlayers - i : 0
+          }))
+        )
+      )
       .value();
 }
 
@@ -202,9 +241,10 @@ function groupPlayer(groups) {
     (acc, group) =>
       group.reduce((acc2, { id, score }) => {
         if (T.isNil(acc2[id])) {
-          acc2[id] = score;
+          acc2[id] = { score, stars: 1 };
         } else {
-          acc2[id] += score;
+          acc2[id].score += score;
+          acc2[id].stars++;
         }
         return acc2;
       }, acc),
