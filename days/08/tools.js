@@ -26,11 +26,23 @@ function initialStateMachine() {
 }
 
 function run(program) {
-  const n = next(program);
+  const toNext = next(program);
+  const ending = isEnding(program);
   return state => {
-    let currentState = state;
+    let previousState = state;
+    let nextState = state;
     while (true) {
-      currentState = n(currentState);
+      previousState = nextState;
+
+      // Compute instruction
+      nextState = toNext(previousState);
+
+      if (ending(nextState)) {
+        return nextState;
+      }
+      if (isLooping(nextState)) {
+        throw loopError(nextState);
+      }
     }
   };
 }
@@ -41,25 +53,31 @@ function run(program) {
  * @returns a new state
  */
 function next(program) {
-  return state => {
-    if (!T.isNil(state.passedInstructions[state.currentInstruction])) {
-      throw new Error(
-        `Infinity loop detected at instruction ${state.currentInstruction}: last accumulator value = ${state.accumulator}`
-      );
+  return state => ({
+    ...state,
+    ...executeInstruction(program[state.currentInstruction])(state),
+    passedInstructions: {
+      ...state.passedInstructions,
+      [state.currentInstruction]: true
     }
-    return {
-      ...state,
-      ...executeInstruction(program[state.currentInstruction])(state),
-      passedInstructions: {
-        ...state.passedInstructions,
-        [state.currentInstruction]: true
-      }
-    };
-  };
+  });
 }
 
 function executeInstruction({ operation, argument }) {
   return instructions[operation](argument);
+}
+
+function isEnding(program) {
+  const nbInstructions = program.length;
+  return state => nbInstructions <= state.currentInstruction;
+}
+function isLooping(state) {
+  return !T.isNil(state.passedInstructions[state.currentInstruction]);
+}
+function loopError(state) {
+  return new Error(
+    `Infinity loop detected at instruction ${state.currentInstruction}: last accumulator value = ${state.accumulator}`
+  );
 }
 
 function logState(previousState, nextState) {

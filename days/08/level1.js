@@ -1,4 +1,3 @@
-const T = require('taninsam');
 const { run, initialStateMachine } = require('./tools');
 
 module.exports = function(program) {
@@ -6,6 +5,6 @@ module.exports = function(program) {
     run(program)(initialStateMachine());
   } catch (error) {
     const [, lastAccumulator] = error.message.split(' = ');
-    return lastAccumulator;
+    return parseInt(lastAccumulator, 10);
   }
 };
