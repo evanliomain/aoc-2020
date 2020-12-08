@@ -56,7 +56,8 @@ function statsToChartData(year, numeroDay, daysWithNoPoint) {
           return {
             ...d,
             firstname: player.firstname,
-            lastname: player.lastname
+            lastname: player.lastname,
+            agency: player.agency
           };
         })
       )

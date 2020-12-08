@@ -3658,6 +3658,11 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
+path-ast@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/path-ast/-/path-ast-1.1.0.tgz#698e817d01de88a78913ed7549c3c93e0e7e0c62"
+  integrity sha1-aY6BfQHeiKeJE+11ScPJPg5+DGI=
+
 path-case@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/path-case/-/path-case-2.1.1.tgz#94b8037c372d3fe2906e465bb45e25d226e8eea5"

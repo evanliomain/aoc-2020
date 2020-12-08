@@ -7,9 +7,21 @@
     "subtitleColor": "#fff",
     "offset": 60
   },
+  "symbol": {
+    "fill": "#fff"
+  },
+  "text": {
+    "fill": "#fff"
+  },
   "style": {
     "guide-label": { "fill": "#fff" },
-    "guide-title": { "fill": "#fff" }
+    "guide-title": { "fill": "#fff" },
+    "legend-text": {
+      "fontSize": 16
+    },
+    "legend-symbol": {
+      "size": 2000
+    }
   },
   "axis": {
     "domainColor": "#cccccc",

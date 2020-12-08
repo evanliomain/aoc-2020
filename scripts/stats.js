@@ -10,7 +10,7 @@ const addMinutes = require('date-fns/fp/addMinutes');
 const addHours = require('date-fns/fp/addHours');
 
 const tendancySpec = require('../stats/tendancy.vg.json');
-const classementSpec = require('../stats/classement2.vg.json');
+const classementSpec = require('../stats/classement3.vg.json');
 const hotHoursSpec = require('../stats/hot-hours.vg.json');
 const hotHoursConfig = require('../stats/hot-hours.config.json');
 
