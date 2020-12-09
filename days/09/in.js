@@ -1,8 +1,6 @@
 const T = require('taninsam');
 
-const nbPreamble = 25;
-
-module.exports = function(input /*, nbPreamble = 25  for unit test */) {
+module.exports = function(input, _, nbPreamble = 25) {
   return T.chain(input)
     .chain(T.map(x => parseInt(x, 10)))
     .chain(T.map((value, index) => ({ value, index })))
