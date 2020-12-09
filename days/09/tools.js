@@ -21,7 +21,5 @@ function findInvalidNumber(input) {
 }
 
 function isValid({ preamble, preambleMap, code }) {
-  return T.chain(preamble)
-    .chain(T.some(p => !T.isNil(preambleMap[code - p]) && p !== code - p))
-    .value();
+  return preamble.some(p => !T.isNil(preambleMap[code - p]) && p !== code - p);
 }
