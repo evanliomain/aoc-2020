@@ -1,12 +1,13 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "width": 1000,
-  "height": 1200,
+  "height": 2000,
   "padding": 10,
   "title": { "text": "Classement AoC 2019", "subtitle": "date oizeozehf" },
   "data": [
     {
-      "name": "source"
+      "name": "source",
+      "values": []
     },
     {
       "name": "table",
@@ -55,9 +56,9 @@
         {
           "type": "aggregate",
           "groupby": ["agency"],
-          "fields": ["name"],
-          "ops": ["count"],
-          "as": ["count"]
+          "fields": ["name", "stars"],
+          "ops": ["count", "sum"],
+          "as": ["count", "stars"]
         },
         {
           "type": "formula",
@@ -152,6 +153,7 @@
     },
     {
       "type": "image",
+      "description": "playeur avatar",
       "from": { "data": "table" },
       "encode": {
         "enter": {
@@ -167,6 +169,7 @@
     },
     {
       "type": "text",
+      "description": "playeur score",
       "from": { "data": "table" },
       "encode": {
         "enter": {
@@ -182,6 +185,7 @@
     },
     {
       "type": "symbol",
+      "description": "playeur agency icon",
       "from": { "data": "names" },
       "encode": {
         "enter": {
@@ -189,16 +193,44 @@
           "y": { "scale": "y", "field": "name" },
           "dy": { "value": -10 },
           "shape": { "field": "icon" },
-          "size": { "signal": "500" },
-          "fontSize": { "value": 18 },
+          "size": { "signal": "500" }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "description": "playeur nb stars",
+      "from": { "data": "names" },
+      "encode": {
+        "enter": {
+          "x": { "value": -45 },
+          "dx": { "value": -25 },
+          "y": { "scale": "y", "field": "name" },
+          "dy": { "value": 1 },
+          "text": { "field": "stars" },
+          "fontSize": { "value": 12 },
           "align": { "value": "center" },
           "baseline": { "value": "middle" }
         }
       }
     },
     {
+      "type": "symbol",
+      "description": "playeur agency icon",
+      "from": { "data": "names" },
+      "encode": {
+        "enter": {
+          "x": { "value": -85 },
+          "y": { "scale": "y", "field": "name" },
+          "dy": { "value": -10 },
+          "shape": { "signal": "star" },
+          "size": { "signal": "300" }
+        }
+      }
+    },
+    {
       "type": "group",
-      "description": "Légende",
+      "description": "Agencies legend",
       "encode": {
         "enter": { "x": { "value": -150 }, "y": { "signal": "height + 75" } }
       },
@@ -264,6 +296,37 @@
                   "dy": { "value": 0 }
                 }
               }
+            },
+            {
+              "type": "symbol",
+              "from": { "data": "legend" },
+              "style": "legend-symbol",
+              "encode": {
+                "enter": {
+                  "x": {
+                    "scale": "bandLegend",
+                    "field": "agency",
+                    "offset": 90
+                  },
+                  "y": { "value": 8 },
+                  "shape": { "signal": "star" },
+                  "size": { "value": 500 }
+                }
+              }
+            },
+            {
+              "type": "text",
+              "from": { "data": "legend" },
+              "style": "legend-text",
+              "encode": {
+                "enter": {
+                  "text": { "field": "stars" },
+                  "x": { "scale": "bandLegend", "field": "agency" },
+                  "dx": { "value": 105 },
+                  "y": { "value": 15 },
+                  "dy": { "value": 0 }
+                }
+              }
             }
           ]
         }
@@ -284,7 +347,7 @@
       "scale": "ylegend",
       "labelFontSize": 18,
       "labelLimit": 300,
-      "labelPadding": 60
+      "labelPadding": 100
     },
     {
       "orient": "left",
@@ -294,7 +357,7 @@
     }
   ],
   "signals": [
-    { "name": "scoreDate", "value": "2020-12-05T06:00:00", "react": false },
+    { "name": "scoreDate", "value": "2020-12-09T05:00:00", "react": false },
     { "name": "legendIconSize", "react": false, "value": 2000 },
     { "name": "legendFontSize", "react": false, "value": 16 },
     {
@@ -331,6 +394,11 @@
       "name": "user",
       "react": false,
       "value": "M0.10418947368421048 0.20890526315789476 c0.21290526315789474 -0.047536842105263155 0.3720842105263158 -0.2374736842105263 0.3720842105263158 -0.46469473684210527 c0 -0.2630315789473684 -0.21324210526315787 -0.47627368421052635 -0.47627368421052635 -0.47627368421052635 S-0.47627368421052635 -0.5188210526315788 -0.47627368421052635 -0.2557894736842105 c0 0.22722105263157893 0.1592 0.4171578947368421 0.3720842105263158 0.46469473684210527 c-0.3018315789473684 0.01063157894736842 -0.5496421052631579 0.23301052631578947 -0.5996210526315789 0.5231789473684211 h1.4076 C0.6538315789473684 0.44193684210526324 0.40602105263157895 0.21953684210526309 0.10418947368421048 0.20890526315789476 z"
+    },
+    {
+      "name": "star",
+      "react": false,
+      "value": "M0.20249999999999996 -0.16666666666666666 L0 -0.8333333333333333 L-0.20249999999999996 -0.16666666666666666 L-0.8333333333333333 -0.16666666666666666 L-0.31833333333333336 0.20083333333333334 L-0.5141666666666667 0.8333333333333333 L0 0.4424999999999999 L0.5149999999999999 0.8333333333333333 L0.31916666666666665 0.20083333333333334 L0.8333333333333333 -0.16666666666666666"
     }
   ]
 }
