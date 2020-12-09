@@ -165,7 +165,6 @@ function computeDateScore(
       .chain(t => parseInt(t, 10))
       .value();
 
-    console.log('computeDateScore i');
     const res = T.chain(result)
       .chain(T.filter(({ ts }) => ts <= time))
       .chain(groupResult)
