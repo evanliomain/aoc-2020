@@ -158,7 +158,7 @@ function generateClassment(year, chartData, numeroDay) {
       {
         chartName: `classement/classement-${date.replace(/:/g, '_')}`,
         width: 1000,
-        height: 1200,
+        height: 2000,
         dwidth: 200
       },
       [
