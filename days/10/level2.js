@@ -1,26 +1,18 @@
+const T = require('taninsam');
+
 module.exports = function(input) {
-  const permutations = new Map();
-  permutations.set(0, 1);
+  const permutations = new Map([[0, 1]]);
 
-  for (let i = 0; i < input.length; i++) {
-    const jolt = input[i];
-    let nbBranch = 0;
+  input.forEach(jolt => {
+    permutations.set(
+      jolt,
+      T.chain([1, 2, 3])
+        .chain(T.map(j => jolt - j))
+        .chain(T.filter(diff => permutations.has(diff)))
+        .chain(T.sumBy(diff => permutations.get(diff)))
+        .value()
+    );
+  });
 
-    const last = jolt - 1;
-    const last2 = jolt - 2;
-    const last3 = jolt - 3;
-
-    if (permutations.has(last)) {
-      nbBranch += permutations.get(last);
-    }
-    if (permutations.has(last2)) {
-      nbBranch += permutations.get(last2);
-    }
-    if (permutations.has(last3)) {
-      nbBranch += permutations.get(last3);
-    }
-    permutations.set(jolt, nbBranch);
-  }
-
-  return permutations.get(input[input.length - 1]);
+  return permutations.get(T.last()(input));
 };
