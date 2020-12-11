@@ -25,3 +25,4 @@ module.exports.asciiToString = require('./ascii-to-string');
 module.exports.replace = require('./replace');
 module.exports.equal = require('./equal');
 module.exports.inMatrix = require('./in-matrix');
+module.exports.constante = require('./constante');
