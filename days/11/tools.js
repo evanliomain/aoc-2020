@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const T = require('taninsam');
 const { printMatrix, patternMatching, mapMatrix } = require('../../tools');
 
-function findEquilibre({ tolerantIndex, countOccupiedSeatsAdjacent }) {
+function findEquilibre({ tolerantIndex, isOccupiedSeats }) {
   return input =>
     T.chain(input)
       .chain(matrix => ({
@@ -15,9 +15,7 @@ function findEquilibre({ tolerantIndex, countOccupiedSeatsAdjacent }) {
           ({ previous, next }) => previous !== next,
           ({ matrix, next }) =>
             T.chain(matrix)
-              .chain(
-                nextGeneration({ tolerantIndex, countOccupiedSeatsAdjacent })
-              )
+              .chain(nextGeneration({ tolerantIndex, isOccupiedSeats }))
               .chain(newMatrix => ({
                 matrix: newMatrix,
                 previous: next,
@@ -31,9 +29,9 @@ function findEquilibre({ tolerantIndex, countOccupiedSeatsAdjacent }) {
       .value();
 }
 
-function nextGeneration({ tolerantIndex, countOccupiedSeatsAdjacent }) {
+function nextGeneration({ tolerantIndex, isOccupiedSeats }) {
   return matrix => {
-    const counter = countOccupiedSeatsAdjacent(matrix);
+    const counter = countOccupiedSeatsAdjacent(isOccupiedSeats, matrix);
     return mapMatrix((cell, x, y) =>
       rule({
         tolerantIndex,
@@ -70,6 +68,27 @@ const countOccupiedSeats = T.sumBy(
     patternMatching(['.', () => 0], ['L', () => 0], ['#', () => 1], [() => 0])
   )
 );
+
+function countOccupiedSeatsAdjacent(isOccupiedSeats, matrix) {
+  const counter = cell =>
+    T.chain(cell)
+      .chain(isOccupiedSeats(matrix))
+      .chain(boolToInt)
+      .value();
+  return ({ x, y }) =>
+    counter({ x, y, dx: -1, dy: 0 }) +
+    counter({ x, y, dx: 1, dy: 0 }) +
+    counter({ x, y, dx: 0, dy: -1 }) +
+    counter({ x, y, dx: 0, dy: 1 }) +
+    counter({ x, y, dx: -1, dy: -1 }) +
+    counter({ x, y, dx: 1, dy: -1 }) +
+    counter({ x, y, dx: -1, dy: 1 }) +
+    counter({ x, y, dx: 1, dy: 1 });
+}
+
+function boolToInt(bool) {
+  return bool ? 1 : 0;
+}
 
 module.exports = {
   printLayout,

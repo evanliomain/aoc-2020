@@ -24,3 +24,4 @@ module.exports.stringToAscii = require('./string-to-ascii');
 module.exports.asciiToString = require('./ascii-to-string');
 module.exports.replace = require('./replace');
 module.exports.equal = require('./equal');
+module.exports.inMatrix = require('./in-matrix');

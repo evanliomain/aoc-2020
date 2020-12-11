@@ -2,7 +2,7 @@ const { findEquilibre } = require('./tools');
 const { atMatrix, inMatrix } = require('../../tools');
 
 module.exports = function(input) {
-  return findEquilibre({ tolerantIndex: 4, isOccupiedSeats })(input);
+  return findEquilibre({ tolerantIndex: 5, isOccupiedSeats })(input);
 };
 
 function isOccupiedSeats(matrix) {
@@ -12,6 +12,13 @@ function isOccupiedSeats(matrix) {
     if (!isIn(newCoord)) {
       return false;
     }
-    return '#' === atMatrix(newCoord)(matrix);
+    const cell = atMatrix(newCoord)(matrix);
+    if ('#' === cell) {
+      return true;
+    }
+    if ('L' === cell) {
+      return false;
+    }
+    return isOccupiedSeats(matrix)({ ...newCoord, dx, dy });
   };
 }
