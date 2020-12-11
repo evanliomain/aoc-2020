@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const T = require('taninsam');
 const { printMatrix, patternMatching, mapMatrix } = require('../../tools');
 
-function findEquilibre({ tolerantIndex, isOccupiedSeats }) {
+function countOccupiedSeatsAtEquilibre({ tolerantIndex, isOccupiedSeats }) {
   return input =>
     T.chain(input)
       .chain(matrix => ({
@@ -36,9 +36,9 @@ function nextGeneration({ tolerantIndex, isOccupiedSeats }) {
       rule({
         tolerantIndex,
         cell,
-        nbOccupiedSeatsAdjacent: counter({ x, y }),
         x,
-        y
+        y,
+        nbOccupiedSeatsAdjacent: counter({ x, y })
       })
     )(matrix);
   };
@@ -92,7 +92,7 @@ function boolToInt(bool) {
 
 module.exports = {
   printLayout,
-  findEquilibre,
+  countOccupiedSeatsAtEquilibre,
   countOccupiedSeats,
   nextGeneration
 };

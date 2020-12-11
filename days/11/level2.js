@@ -1,9 +1,10 @@
-const { findEquilibre } = require('./tools');
+const { countOccupiedSeatsAtEquilibre } = require('./tools');
 const { atMatrix, inMatrix } = require('../../tools');
 
-module.exports = function(input) {
-  return findEquilibre({ tolerantIndex: 5, isOccupiedSeats })(input);
-};
+module.exports = countOccupiedSeatsAtEquilibre({
+  tolerantIndex: 5,
+  isOccupiedSeats
+});
 
 function isOccupiedSeats(matrix) {
   const isIn = inMatrix(matrix);
