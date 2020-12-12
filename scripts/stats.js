@@ -11,8 +11,11 @@ const addHours = require('date-fns/fp/addHours');
 
 const tendancySpec = require('../stats/tendancy.vg.json');
 const classementSpec = require('../stats/classement3.vg.json');
+const treemapSpec = require('../stats/treemap.vg.json');
 const hotHoursSpec = require('../stats/hot-hours.vg.json');
 const hotHoursConfig = require('../stats/hot-hours.config.json');
+
+const dataFallback = require('../data/leaderboard.json');
 
 const generateChartFile = require('../stats/generate-chart-file');
 const getData = require('../stats/get-data');
@@ -53,7 +56,10 @@ async function main() {
         chalk.cyan(`leaderboard: `, chalk.bold(leaderboard))
       ].join(' - ')
   );
+
+  // Replace data call by a local file in case of timeout
   const data = await getData({ year, leaderboard });
+  // const data = dataFallback;
 
   await writeFile(`dist/data-raw-${year}-${day}-${leaderboard}.json`)(
     JSON.stringify(data, 2)
@@ -68,15 +74,15 @@ async function main() {
   );
 
   // Generate Tendancy
-  console.log(`Generating tendancy-${year} chart`);
-  await generateChartFile(tendancySpec, {
-    chartName: `tendancy-${year}-${day}`,
-    width,
-    height,
-    dwidth: -300
-  })(chartData).then(
-    log(path => 'Tendancy chart generated at ' + chalk.blue(path))
-  );
+  // console.log(`Generating tendancy-${year} chart`);
+  // await generateChartFile(tendancySpec, {
+  //   chartName: `tendancy-${year}-${day}`,
+  //   width,
+  //   height,
+  //   dwidth: -300
+  // })(chartData).then(
+  //   log(path => 'Tendancy chart generated at ' + chalk.blue(path))
+  // );
 
   // Generate Classement by day
   console.log(`Generating classement-* chart`);
@@ -95,24 +101,28 @@ async function main() {
   */
 
   // Generate hothours chart
-  const result = rawToResult(daysWithNoPoint)(data);
-  await writeFile(`dist/data-result-${year}-${day}-${leaderboard}.json`)(
-    JSON.stringify(result, 2)
-  );
-  await generateChartFile(hotHoursSpec, {
-    chartName: `hot-hours-${year}-${day}`,
-    width: 1000,
-    height: 300,
-    dwidth: -400,
-    config: hotHoursConfig
-  })(result).then(
-    log(path => 'Hot hours chart generated at ' + chalk.blue(path))
-  );
+  // const result = rawToResult(daysWithNoPoint)(data);
+  // await writeFile(`dist/data-result-${year}-${day}-${leaderboard}.json`)(
+  //   JSON.stringify(result, 2)
+  // );
+  // await generateChartFile(hotHoursSpec, {
+  //   chartName: `hot-hours-${year}-${day}`,
+  //   width: 1000,
+  //   height: 300,
+  //   dwidth: -400,
+  //   config: hotHoursConfig
+  // })(result).then(
+  //   log(path => 'Hot hours chart generated at ' + chalk.blue(path))
+  // );
 
   console.log(chalk.green('Charts generated'));
 }
 
-main().catch(() => {});
+main().catch(error => {
+  console.log(chalk.red(error));
+  console.log(chalk.grey('----------'));
+  console.log(error);
+});
 
 function getDate(year, numeroDay) {
   return i =>
@@ -152,13 +162,36 @@ function generateClassment(year, chartData, numeroDay) {
   const subtitle = getDateForSubtitle(year, numeroDay);
   return async i => {
     const date = toDate(i);
+    // const chartName= `classement/classement-${date.replace(/:/g, '_')}`;
+    const chartName = `classement/classement-${year}-${numeroDay}`;
     classementSpec.title = { text: `Classement AoC ${year}`, subtitle };
+
+    treemapSpec.title = { text: `Classement AoC ${year}`, subtitle };
+
+    // await generateChartFile(
+    //   classementSpec,
+    //   {
+    //     chartName,
+    //     width: 1000,
+    //     height: 2000,
+    //     dwidth: 200
+    //   },
+    //   [
+    //     {
+    //       name: 'scoreDate',
+    //       value: date
+    //     }
+    //   ]
+    // )(chartData).then(
+    //   log(path => 'Temporary chart generated at ' + chalk.grey(path))
+    // );
+
     await generateChartFile(
-      classementSpec,
+      treemapSpec,
       {
-        chartName: `classement/classement-${date.replace(/:/g, '_')}`,
-        width: 1000,
-        height: 2000,
+        chartName: `${chartName}_treemap`,
+        width: 2000,
+        height: 1000,
         dwidth: 200
       },
       [
@@ -167,8 +200,6 @@ function generateClassment(year, chartData, numeroDay) {
           value: date
         }
       ]
-    )(chartData).then(
-      log(path => 'Temporary chart generated at ' + chalk.grey(path))
-    );
+    )(chartData).then(log(path => 'Treemap classement at ' + chalk.blue(path)));
   };
 }

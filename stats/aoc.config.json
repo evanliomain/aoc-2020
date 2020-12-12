@@ -19,8 +19,31 @@
     "legend-text": {
       "fontSize": 16
     },
+    "legend-text-star": {
+      "fontSize": 16,
+      "fill": "#ffff66"
+    },
     "legend-symbol": {
       "size": 2000
+    },
+    "legend-symbol-star": {
+      "size": 2000,
+      "fill": "#ffff66"
+    },
+    "bg": {
+      "fill": "#0f0f23"
+    },
+    "border-bg": {
+      "stroke": "#fff"
+    },
+    "fg": {
+      "fill": "#fff"
+    },
+    "star": {
+      "fill": "#ffff66"
+    },
+    "shadow": {
+      "fill": "#000"
     }
   },
   "axis": {
