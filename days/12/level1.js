@@ -1,94 +1,40 @@
-const { unless } = require('taninsam');
-const T = require('taninsam');
-const { patternMatchingBy, patternMatching, log } = require('../../tools');
+const { patternMatching } = require('../../tools');
+const { solve } = require('./tools');
 
 module.exports = function(input) {
-  return T.chain(input)
-    .chain(
-      T.map(
-        unless(
-          ({ action, value }) => !('R' === action && 270 === value),
-          () => ({ action: 'L', value: 90 })
-        )
-      )
-    )
-    .chain(
-      T.map(
-        unless(
-          ({ action, value }) => !('L' === action && 270 === value),
-          () => ({ action: 'R', value: 90 })
-        )
-      )
-    )
-    .chain(
-      T.reduce(
-        (previous, { action, value }) =>
-          patternMatchingBy(
-            ({ action }) => action,
-            [
-              'N',
-              ({ previous, value }) => ({
-                ...previous,
-                n: previous.n + value
-              })
-            ],
-            [
-              'S',
-              ({ previous, value }) => ({
-                ...previous,
-                n: previous.n - value
-              })
-            ],
-            [
-              'E',
-              ({ previous, value }) => ({
-                ...previous,
-                e: previous.e + value
-              })
-            ],
-            [
-              'W',
-              ({ previous, value }) => ({
-                ...previous,
-                e: previous.e - value
-              })
-            ],
-            [
-              'F',
-              ({ previous, value }) => ({
-                ...previous,
-                ...forward(previous, value)
-              })
-            ],
-            [
-              'L',
-              ({ previous, value }) => ({
-                ...previous,
-                facing: orient(previous.facing, action, value)
-              })
-            ],
-            [
-              'R',
-              ({ previous, action, value }) => ({
-                ...previous,
-                facing: orient(previous.facing, action, value)
-              })
-            ]
-          )({ previous, action, value }),
-        { e: 0, n: 0, facing: 'e' }
-      )
-    )
-    .chain(({ e, n }) => Math.abs(e) + Math.abs(n))
-    .value();
+  return solve({
+    start: { e: 0, n: 0, facing: 'e' },
+    move,
+    forward,
+    turnLeft: turn,
+    turnRight: turn
+  })(input);
 };
 
-function forward({ e, n, facing }, value) {
-  return patternMatching(
-    ['e', () => ({ e: e + value })],
-    ['w', () => ({ e: e - value })],
-    ['n', () => ({ n: n + value })],
-    ['s', () => ({ n: n - value })]
-  )(facing);
+function move(orient, direction = 1) {
+  return ({ previous, value }) => ({
+    ...previous,
+    [orient]: previous[orient] + direction * value
+  });
+}
+
+function turn({ previous, action, value }) {
+  return {
+    ...previous,
+    facing: orient(previous.facing, action, value)
+  };
+}
+
+function forward() {
+  return ({ previous, value }) => ({
+    ...previous,
+    ...patternMatching(
+      ['e', () => ({ e: previous.e + value })],
+      ['w', () => ({ e: previous.e - value })],
+      ['n', () => ({ n: previous.n + value })],
+      ['s', () => ({ n: previous.n - value })]
+    )(previous.facing)
+  });
 }
 
 function orient(facing, action, value) {
@@ -102,7 +48,6 @@ function orient(facing, action, value) {
     return turnL(facing);
   }
 }
-
 function turnR(facing) {
   return patternMatching(
     ['e', () => 's'],

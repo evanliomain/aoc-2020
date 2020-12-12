@@ -6,7 +6,7 @@ const read = require('../../utils/read');
 describe('12-1', () => {
   it.each`
     sample | expected
-    ${1}   | ${'TODO'}
+    ${1}   | ${25}
   `('returns $expected for sample $sample', ({ sample, expected }) => {
     expect(solve(parse(read(day)(sample)))).toEqual(expected);
   });

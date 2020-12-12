@@ -1,43 +1,13 @@
-const { unless } = require('taninsam');
-const T = require('taninsam');
-const { patternMatchingBy, log } = require('../../tools');
+const { solve } = require('./tools');
 
 module.exports = function(input) {
-  return T.chain(input)
-    .chain(
-      T.map(
-        unless(
-          ({ action, value }) => !('R' === action && 270 === value),
-          () => ({ action: 'L', value: 90 })
-        )
-      )
-    )
-    .chain(
-      T.map(
-        unless(
-          ({ action, value }) => !('L' === action && 270 === value),
-          () => ({ action: 'R', value: 90 })
-        )
-      )
-    )
-    .chain(
-      T.reduce(
-        (previous, { action, value }) =>
-          patternMatchingBy(
-            ({ action }) => action,
-            ['N', moveWaypoint('n')],
-            ['S', moveWaypoint('n', -1)],
-            ['E', moveWaypoint('e')],
-            ['W', moveWaypoint('e', -1)],
-            ['L', turn(turnL)],
-            ['R', turn(turnR)],
-            ['F', forward]
-          )({ previous, action, value }),
-        { e: 0, n: 0, waypoint: { e: 10, n: 1 } }
-      )
-    )
-    .chain(({ e, n }) => Math.abs(e) + Math.abs(n))
-    .value();
+  return solve({
+    start: { e: 0, n: 0, waypoint: { e: 10, n: 1 } },
+    move,
+    forward,
+    turnLeft: turn(turnL),
+    turnRight: turn(turnR)
+  })(input);
 };
 
 function turn(fTurn) {
@@ -49,15 +19,15 @@ function turn(fTurn) {
   };
 }
 
-function forward({ previous, value }) {
-  return {
+function forward() {
+  return ({ previous, value }) => ({
     ...previous,
     e: previous.e + value * previous.waypoint.e,
     n: previous.n + value * previous.waypoint.n
-  };
+  });
 }
 
-function moveWaypoint(orient, direction = 1) {
+function move(orient, direction = 1) {
   return ({ previous, value }) => ({
     ...previous,
     waypoint: {
