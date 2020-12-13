@@ -3,8 +3,8 @@ const { equal, parseNumber } = require('../../tools');
 
 module.exports = function({ timestamp, busIDs }) {
   return T.chain(busIDs)
-    .chain(filter(T.not(equal('x'))))
-    .chain(map(parseNumber()))
+    .chain(T.filter(T.not(equal('x'))))
+    .chain(T.map(parseNumber()))
     .chain(
       T.map(id => ({
         id,
