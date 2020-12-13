@@ -26,3 +26,4 @@ module.exports.replace = require('./replace');
 module.exports.equal = require('./equal');
 module.exports.inMatrix = require('./in-matrix');
 module.exports.constante = require('./constante');
+module.exports.parseNumber = require('./parse-number');
