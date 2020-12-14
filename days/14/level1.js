@@ -1,8 +1,25 @@
 const T = require('taninsam');
-const { patternMatchingBy, parseNumber } = require('../../tools');
+const {
+  patternMatchingBy,
+  uncurry,
+  fromBinary,
+  spread,
+  toBinary
+} = require('../../tools');
+const { sumMemory, masking, changeMask } = require('./tools');
 
 module.exports = function(instructions) {
   return T.chain(instructions)
+    .chain(
+      T.map(
+        patternMatchingBy(({ type }) => type, [
+          'memory',
+          spread(({ value }) => ({
+            value: toBinary(value).padStart(36, 0)
+          }))
+        ])
+      )
+    )
     .chain(
       T.reduce(
         uncurry(
@@ -15,50 +32,15 @@ module.exports = function(instructions) {
         {}
       )
     )
-    .chain(T.entries())
-    .chain(T.filter(([key]) => 'mask' !== key))
-    .chain(T.sumBy(([_, value]) => value))
+    .chain(sumMemory)
     .value();
 };
 
-function uncurry(f) {
-  return (...args) => f(args);
-}
-
-function changeMask([memory, { mask0, mask1, maskX }]) {
-  return {
-    ...memory,
-    mask: { mask0, mask1, maskX }
-  };
-}
-
 function alterMemory([memory, { adress, value }]) {
-  const fromBinaire = parseNumber(2);
-
-  const newValue = fromBinaire(applyMask(value, memory.mask.maskX));
-  if (newValue < 0) {
-    console.log({
-      adress,
-      value,
-      newValue,
-      maskX: memory.mask.maskX,
-      mask1: memory.mask.mask1,
-      mask0: memory.mask.mask0
-    });
-  }
-
-  return {
-    ...memory,
-    [adress]: newValue
-  };
-}
-
-function applyMask(value, mask) {
-  let newValue = '';
-  for (let i = 0; i < 36; i++) {
-    newValue += applyBinaryMask(value[i], mask[i]);
-  }
-  return newValue;
+  const mask = masking(applyBinaryMask);
+  return spread(() => ({
+    [adress]: fromBinary(mask({ value, mask: memory.mask }))
+  }))(memory);
 }
 
 function applyBinaryMask(v, m) {
