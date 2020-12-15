@@ -1,6 +1,8 @@
+const { parseNumber } = require('../../tools');
+
 module.exports = function([timestamp, busIDs]) {
   return {
-    timestamp: parseInt(timestamp, 10),
+    timestamp: parseNumber()(timestamp),
     busIDs: busIDs.split(',')
   };
 };
