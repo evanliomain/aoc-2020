@@ -34,3 +34,4 @@ module.exports.fromBinary = require('./from-binary');
 module.exports.captureGroups = require('./capture-groups');
 module.exports.spread = require('./spread');
 module.exports.memoizer = require('./memoizer');
+module.exports.autoConvert = require('./auto-convert');
