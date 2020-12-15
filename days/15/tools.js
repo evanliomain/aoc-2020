@@ -11,14 +11,11 @@ function lastSpokenNumber(nbIterations) {
     });
     let lastSpoken = input[input.length - 1];
     for (let turn = input.length; turn < nbIterations; turn++) {
-      if (lastSeen.has(lastSpoken)) {
-        const turnLastSeen = lastSeen.get(lastSpoken);
-        lastSeen.set(lastSpoken, turn);
-        lastSpoken = turn - turnLastSeen;
-      } else {
-        lastSeen.set(lastSpoken, turn);
-        lastSpoken = 0;
-      }
+      const turnLastSeen = lastSeen.has(lastSpoken)
+        ? lastSeen.get(lastSpoken)
+        : turn;
+      lastSeen.set(lastSpoken, turn);
+      lastSpoken = turn - turnLastSeen;
     }
     return lastSpoken;
   };
