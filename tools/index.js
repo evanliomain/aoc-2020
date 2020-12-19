@@ -36,3 +36,4 @@ module.exports.spread = require('./spread');
 module.exports.memoizer = require('./memoizer');
 module.exports.autoConvert = require('./auto-convert');
 module.exports.parseLinesWithRegexp = require('./parse-lines-with-regexp');
+module.exports.matchRegexp = require('./match-regexp');
