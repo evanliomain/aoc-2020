@@ -10,10 +10,10 @@ module.exports = function({ messages, rules }) {
   // rules[11] = '42 31 | 42 11 31';
 
   // Actual no looping replacement
-  // Recursive pattern is:42 ( 11 )? 31
+  // Recursive pattern is: 42 ( 11 )? 31
   rules[8] = '( 42 )+';
   rules[11] =
-    '42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31';
+    '42 ( 42 ( 42 ( 42 ( 42 ( 42 ( 42 31 )? 31 )? 31 )? 31 )? 31 )? 31 )? 31';
 
   return T.chain(messages)
     .chain(T.filter(matchRegexp(rulesToRegex(rules))))

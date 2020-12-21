@@ -16,6 +16,7 @@ function nextCoordinate(slope) {
 }
 
 function countTree(input) {
+  const at = atMatrix(input);
   return slope => {
     const slider = nextCoordinate(slope);
     const width = input[0].length;
@@ -24,7 +25,7 @@ function countTree(input) {
     let treeCounter = 0;
     for (let i = 0; i < height - 1; i += slope.y) {
       coord = slider(coord);
-      const element = atMatrix({ x: coord.x % width, y: coord.y })(input);
+      const element = at({ x: coord.x % width, y: coord.y });
       if (isTree(element)) {
         treeCounter++;
       }

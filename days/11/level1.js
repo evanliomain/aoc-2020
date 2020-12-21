@@ -7,12 +7,13 @@ module.exports = countOccupiedSeatsAtEquilibre({
 });
 
 function isOccupiedSeats(matrix) {
+  const at = atMatrix(matrix);
   const isIn = inMatrix(matrix);
   return ({ x, y, dx, dy }) => {
     const newCoord = { x: x + dx, y: y + dy };
     if (!isIn(newCoord)) {
       return false;
     }
-    return '#' === atMatrix(newCoord)(matrix);
+    return '#' === at(newCoord);
   };
 }
