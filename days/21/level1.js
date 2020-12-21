@@ -1,47 +1,13 @@
 const T = require('taninsam');
+const { getInertIngredients } = require('./tools');
 
 module.exports = function(foods) {
-  const allAllergens = new Map();
+  const inertIngredients = getInertIngredients(foods);
 
-  foods.forEach(({ ingredients, allergens }) => {
-    allergens.forEach(allergen => {
-      if (!allAllergens.has(allergen)) {
-        allAllergens.set(allergen, ingredients);
-      } else {
-        allAllergens.set(
-          allergen,
-          allAllergens
-            .get(allergen)
-            .filter(ingredientWithAllergens =>
-              ingredients.includes(ingredientWithAllergens)
-            )
-        );
-      }
-    });
-  });
-
-  const allAllergensIngredients = new Set();
-
-  for (const allergens of allAllergens.values()) {
-    allergens.forEach(allergen => allAllergensIngredients.add(allergen));
-  }
-
-  const safeIngredients = new Set(
-    T.chain(foods)
-      .chain(T.map(({ ingredients }) => ingredients))
-      .chain(T.flat())
-      .value()
-  );
-  safeIngredients.forEach(safeIngredient => {
-    if (allAllergensIngredients.has(safeIngredient)) {
-      safeIngredients.delete(safeIngredient);
-    }
-  });
-
-  let counter = 0;
-  foods.forEach(({ ingredients }) => {
-    counter += ingredients.filter(ingredient => safeIngredients.has(ingredient))
-      .length;
-  });
-  return counter;
+  return T.chain(foods)
+    .chain(T.map(({ ingredients }) => ingredients))
+    .chain(T.map(T.filter(ingredient => inertIngredients.has(ingredient))))
+    .chain(T.map(T.length()))
+    .chain(T.sum())
+    .value();
 };
