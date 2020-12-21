@@ -37,3 +37,4 @@ module.exports.memoizer = require('./memoizer');
 module.exports.autoConvert = require('./auto-convert');
 module.exports.parseLinesWithRegexp = require('./parse-lines-with-regexp');
 module.exports.matchRegexp = require('./match-regexp');
+module.exports.euclideDivision = require('./euclide-division');
