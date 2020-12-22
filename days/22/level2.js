@@ -6,11 +6,7 @@ module.exports = function({ deck1, deck2 }) {
 };
 
 function game({ deck1, deck2 }) {
-  return subGame({
-    deck1,
-    deck2,
-    depth: 1
-  });
+  return subGame({ deck1, deck2, depth: 1 });
 }
 
 function subGame({ deck1, deck2, depth }) {
