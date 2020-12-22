@@ -1,14 +1,5 @@
-const T = require('taninsam');
 const chalk = require('chalk');
-const { score, logDecks } = require('./tools');
-const { captureGroups } = require('../../tools');
-
-const cash = new Set();
-
-// 29177 is the answer
-
-// 8841 too low
-// 2956 too low
+const { score } = require('./tools');
 
 module.exports = function({ deck1, deck2 }) {
   return game({ deck1, deck2 }).score;
