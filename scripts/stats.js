@@ -143,16 +143,20 @@ function getDateForSubtitle(year, numeroDay) {
 }
 
 async function generateClassments(year, chartData, numeroDay) {
-  const gen = generateClassment(year, chartData, numeroDay);
-  // const minutes = makeArray(x => 15 * x)(24 * 4);
-  // for (let i = 0; i < minutes.length; i++) {
-  //   await gen(minutes[i]);
+  // for (let i = 1; i <= parseInt(numeroDay, 10); i++) {
+  //   await generateClassment(year, chartData, String(i).padStart(2, '0'))(23);
   // }
 
-  // const n = 24;
-  // for (let i = 0; i < n; i++) {
-  //   await gen(i);
-  // }
+  const gen = generateClassment(year, chartData, numeroDay);
+  // // const minutes = makeArray(x => 15 * x)(24 * 4);
+  // // for (let i = 0; i < minutes.length; i++) {
+  // //   await gen(minutes[i]);
+  // // }
+
+  // // const n = 24;
+  // // for (let i = 0; i < n; i++) {
+  // //   await gen(i);
+  // // }
 
   await gen(23);
 }
