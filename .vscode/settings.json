@@ -1,10 +1,103 @@
 {
   "editor.formatOnSave": true,
-  "tslint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.addMissingImports": true
+  },
   "editor.tabSize": 2,
   "editor.rulers": [80],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.trimAutoWhitespace": false
+  "editor.trimAutoWhitespace": false,
+
+  // Commit convention
+  "gitmoji.onlyUseAdditionalEmojis": true,
+  "gitmoji.additionalEmojis": [
+    {
+      "emoji": "✨",
+      "description": "when adding a new user-facing feature"
+    },
+    { "emoji": "🎨", "description": "when improving UI" },
+    { "emoji": "🇫🇷", "description": "when adding or updating i18n labels" },
+    {
+      "emoji": "💫",
+      "description": "when adding or updating animations and transitions."
+    },
+    { "emoji": "♻️", "description": "when refactoring or improving code" },
+    {
+      "emoji": "🚚",
+      "description": "when moving or renaming resources (e.g.: files, paths, routes)."
+    },
+    { "emoji": "🚀", "description": "when improving performance" },
+    { "emoji": "🎰", "description": "when updating configs" },
+    { "emoji": "🔧", "description": "when improving dev tools" },
+    { "emoji": "♿", "description": " when improving accessibility" },
+    {
+      "emoji": "📝",
+      "description": "when writing docs (e.g. README, code comments)"
+    },
+    {
+      "emoji": "🔖",
+      "description": "when cutting a new release / version bump"
+    },
+    { "emoji": "✏️", "description": "when fixing a typo" },
+    { "emoji": "🐞", "description": "when fixing a bug" },
+    { "emoji": "🚑", "description": "when fixing a crash or critical hotfix" },
+    { "emoji": "🔒", "description": "when fix security issues" },
+    { "emoji": "🔥", "description": "when removing code or files" },
+    { "emoji": "✅", "description": "when adding new unit tests" },
+    { "emoji": "✔️", "description": "when updating unit tests" },
+    { "emoji": "✅💻", "description": "when adding new end to end tests" },
+    { "emoji": "✔️💻", "description": "when updating end to end tests" },
+    { "emoji": "💚", "description": "when fixing the CI build" },
+    { "emoji": "🚨", "description": "when fixing linter warnings" },
+    { "emoji": "📷", "description": "when update a snapshot" },
+    { "emoji": "🔊➕", "description": "when adding logging" },
+    { "emoji": "🔊➖", "description": "when removing logging" },
+    { "emoji": "⬆", "description": "when upgrading dependencies" },
+    { "emoji": "⬇", "description": "when downgrading dependencies" },
+    {
+      "emoji": "📌",
+      "description": "when pin dependencies to specific versions."
+    },
+    { "emoji": "➕", "description": "when adding dependencies" },
+    { "emoji": "➖", "description": "when removing dependencies" },
+    { "emoji": "🎌", "description": "when adding a feature flipping" },
+    { "emoji": "👷", "description": "when improve the CI build" },
+    {
+      "emoji": "⚡",
+      "description": "when making a backwards-incompatible change"
+    },
+    {
+      "emoji": "🚧",
+      "description": "when the change is a work in progress (do not merge)"
+    },
+    {
+      "emoji": "📈",
+      "description": "when adding or updating analytics or track code."
+    },
+    { "emoji": "📡", "description": "when adding instrumentation or metrics" },
+    {
+      "emoji": "💩",
+      "description": "when writing bad code that needs to be improved."
+    },
+    { "emoji": "⏪", "description": "when revert changes." },
+    { "emoji": "🍱", "description": "when adding or updating assets." },
+    {
+      "emoji": "💡",
+      "description": "when adding or updating comments in source code."
+    },
+    { "emoji": "📱", "description": "when working on responsive design." },
+    {
+      "emoji": "🙈",
+      "description": "when adding or updating a .gitignore file."
+    },
+    { "emoji": "🔍", "description": "when improving SEO." },
+    { "emoji": "📴", "description": "when improving offline support." },
+    { "emoji": "🎉", "description": "initial commit" }
+  ],
+
+  "ponicode.testSettings.testLocation.locationType": "Same folder as source file",
+  "ponicode.testSettings.testLocation.path": "{rootDir}\\{filePath}\\{fileName}.test.{ext}"
 }
